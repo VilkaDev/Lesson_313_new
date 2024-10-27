@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);   // пытаемся достать юзера по пришедшему имени
+        User user = findByUsername(username);
         if(user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
@@ -58,17 +58,10 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getAllUsers() {
-        return userRepo.findAll();  // когда делала CRUD репозиторий, светилось красным
+        return userRepo.findAll();
     }
 
     public boolean saveUser(User user) {
-//        User userFromDB = userRepo.findByUsername(user.getUsername());
-//
-//        if (userFromDB != null) {
-//            return false;
-//        }
-//
-//        user.setRoles((List<Role>) Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         return true;
